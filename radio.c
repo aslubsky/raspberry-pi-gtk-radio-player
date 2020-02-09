@@ -74,34 +74,24 @@ activate (GtkApplication *app,
   GtkWidget *button3;
   GtkWidget *button4;
   GtkWidget *button5;
-  GtkWidget *buttonBox1;
-  GtkWidget *buttonBox2;
-  GtkWidget *mainBox;
-  
+  GtkGrid *grid;
+
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "Radio");
   gtk_window_set_default_size (GTK_WINDOW (window), 180, 250);
 
-  mainBox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
-  gtk_container_set_border_width (GTK_CONTAINER (mainBox), 20);
-  gtk_container_add (GTK_CONTAINER (window), mainBox);
+  grid = gtk_grid_new();
+
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 20);
+  gtk_container_add (GTK_CONTAINER (window), grid);
 
   label = gtk_label_new ("");
   char *markup;
   markup = g_markup_printf_escaped ("<span size=\"xx-large\">%s</span>", labels[0]);
   gtk_label_set_markup (GTK_LABEL(label), markup);
-  gtk_container_add (GTK_CONTAINER (mainBox), label);
-
-  buttonBox1 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (mainBox), buttonBox1);
-
-  buttonBox2 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (mainBox), buttonBox2);
 
   button1 = gtk_button_new_with_label (labels[0]);
   g_signal_connect (button1, "clicked", G_CALLBACK (run_audio_player_click), 0);
-  /*g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);*/
-  gtk_container_add (GTK_CONTAINER (buttonBox1), button1);
   currButton = button1;
   GtkStyleContext *context;
   context = gtk_widget_get_style_context (button1);
@@ -112,21 +102,15 @@ activate (GtkApplication *app,
 
   button2 = gtk_button_new_with_label (labels[1]);
   g_signal_connect (button2, "clicked", G_CALLBACK (run_audio_player_click), 1);
-  gtk_container_add (GTK_CONTAINER (buttonBox1), button2);
-
 
   button3 = gtk_button_new_with_label (labels[2]);
   g_signal_connect (button3, "clicked", G_CALLBACK (run_audio_player_click), 2);
-  gtk_container_add (GTK_CONTAINER (buttonBox2), button3);
-
 
   button4 = gtk_button_new_with_label (labels[3]);
   g_signal_connect (button4, "clicked", G_CALLBACK (run_audio_player_click), 3);
-  gtk_container_add (GTK_CONTAINER (buttonBox2), button4);
 
   button5 = gtk_button_new_with_label ("Вимкнути");
   g_signal_connect (button5, "clicked", G_CALLBACK (poweroff_click), NULL);
-  gtk_container_add (GTK_CONTAINER (buttonBox2), button5);
 
 
   gtk_style_context_add_provider (gtk_widget_get_style_context (button1), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -134,6 +118,20 @@ activate (GtkApplication *app,
   gtk_style_context_add_provider (gtk_widget_get_style_context (button3), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   gtk_style_context_add_provider (gtk_widget_get_style_context (button4), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   gtk_style_context_add_provider (gtk_widget_get_style_context (button5), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+
+  gtk_grid_set_row_spacing(GTK_GRID (grid), 50);
+  gtk_grid_set_column_spacing(GTK_GRID (grid), 50);
+
+
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), button5, 1, 0, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), button1, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), button2, 1, 1, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), button3, 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), button4, 1, 2, 1, 1);
 
   gtk_widget_show_all (window);
 

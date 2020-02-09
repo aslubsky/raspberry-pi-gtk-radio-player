@@ -3,6 +3,8 @@
 
 GtkWidget *currButton;
 GtkWidget *label;
+GtkWidget *window;
+
 char* labels[] = { "Громадське", "Промінь","Перший","Культура" };
 int stationNumber = 0;
 
@@ -29,6 +31,13 @@ run_audio_player ()
     gboolean res = g_spawn_command_line_async (cmdStr, NULL);
 }
 
+
+static void poweroff_click (GtkWidget *widget,
+             gpointer   data)
+{
+  gboolean res = g_spawn_command_line_async ("poweroff", NULL);
+  gtk_widget_destroy(window);
+}
 
 static void
 run_audio_player_click (GtkWidget *widget,
@@ -60,11 +69,11 @@ static void
 activate (GtkApplication *app,
           gpointer        user_data)
 {
-  GtkWidget *window;
   GtkWidget *button1;
   GtkWidget *button2;
   GtkWidget *button3;
   GtkWidget *button4;
+  GtkWidget *button5;
   GtkWidget *buttonBox1;
   GtkWidget *buttonBox2;
   GtkWidget *mainBox;
@@ -115,16 +124,21 @@ activate (GtkApplication *app,
   g_signal_connect (button4, "clicked", G_CALLBACK (run_audio_player_click), 3);
   gtk_container_add (GTK_CONTAINER (buttonBox2), button4);
 
+  button5 = gtk_button_new_with_label ("Вимкнути");
+  g_signal_connect (button5, "clicked", G_CALLBACK (poweroff_click), NULL);
+  gtk_container_add (GTK_CONTAINER (buttonBox2), button5);
+
 
   gtk_style_context_add_provider (gtk_widget_get_style_context (button1), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   gtk_style_context_add_provider (gtk_widget_get_style_context (button2), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   gtk_style_context_add_provider (gtk_widget_get_style_context (button3), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   gtk_style_context_add_provider (gtk_widget_get_style_context (button4), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider (gtk_widget_get_style_context (button5), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   gtk_widget_show_all (window);
 
   stationNumber = 0;
-  run_audio_player();
+  /*run_audio_player();*/
 }
 
 int

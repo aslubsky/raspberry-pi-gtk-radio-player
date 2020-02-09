@@ -138,7 +138,7 @@ activate (GtkApplication *app,
   gtk_widget_show_all (window);
 
   stationNumber = 0;
-  /*run_audio_player();*/
+  run_audio_player();
 }
 
 int
